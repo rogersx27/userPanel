@@ -1,2 +1,6 @@
 # We ignore somethin here
+node_modules/
 
+logs/
+
+package-lock.json

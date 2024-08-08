@@ -1,57 +1,22 @@
-const http = require('http')
-const url = require('url')
-const Logger = require('./logger')
+require('dotenv').config()
+import { createServer } from 'http'
+import routes from './routes'
+import Logger from './utils/logger'
 
-const port = process.env.SERVER_PORT
+const port = process.env.SERVER_PORT || 3000
 const logger = new Logger()
 
-function stringify(obj) {
-  return JSON.stringify(obj, null, 2)
-}
-
-function parse(body) {
-  try {
-    return JSON.parse(body)
-  } catch (e) {
-    return body
-  }
-}
-
-const server = http.createServer((req, res) => {
+const server = createServer((req, res) => {
+  const url = require('url')
   const parsedUrl = url.parse(req.url, true)
-  const pathName = parsedUrl.pathname
-  const method = req.method.toUpperCase()
+  const pathName = parsedUrl.pathname.split('/')[1]
 
-  res.setHeader('Content-Type', 'application/json')
-
-  if (pathName === '/health' && method === 'GET') {
-    res.writeHead(200)
-    const response = { status: 'UP' }
-
-    logger.info({ method, pathName })
-
-    res.end(stringify(response))
-    logger.logRequest(req, res)
-  } else if (pathName === '/health' && method === 'POST') {
-    let body = ''
-
-    req.on('data', chunk => {
-      body += chunk.toString()
-    })
-
-    req.on('end', () => {
-      res.writeHead(200)
-      const response = { status: 'UP', body: parse(body) }
-      res.end(stringify(response))
-      logger.logRequest(req, res)
-    })
-
-    logger.info({ method, pathName })
-    
+  if (routes[`/${pathName}`]) {
+    routes[`/${pathName}`](req, res)
   } else {
     res.writeHead(404)
     const response = { error: 'Not found' }
-    res.end(stringify(response))
+    res.end(JSON.stringify(response, null, 2))
     logger.logRequest(req, res)
   }
 })
@@ -59,4 +24,9 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`)
   logger.info({ message: `Server running at http://localhost:${port}/` })
+})
+
+server.on('error', err => {
+  console.error('Server error:', err)
+  logger.error({ message: 'Server error', error: err })
 })

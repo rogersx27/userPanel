@@ -1,40 +1,16 @@
 const fs = require('fs')
 
-const logInfo = (type, info) => {
-  const log = {
-    type: type.toUpperCase(),
-    date: new Date().toISOString(),
-    info: info,
-  }
-  return log
-}
+const path = require('path')
+const { stringify, appendFile, getLogData } = require('./helpers')
 
-const stringify = obj => JSON.stringify(obj, null, 2) + ',\n'
-
-const getLogData = (type, info) => {
-  const log = logInfo(type, info)
-  const stringifiedLog = stringify(log)
-  return { log, stringifiedLog }
-}
-
-const appendFile = (file, data) => {
-  fs.appendFile(file, data, err => {
-    if (err) {
-      console.error(`Error writing to log file: ${err.message}`)
-      return { error: 'Error writing to log file', message: err.message }
-    }
-    console.log(`Data written to ${file}`)
-    return true
-  })
-}
-
-// Clase para manejar el logging
+// Clase para manejar el loggingz
 class Logger {
   constructor() {
-    this.logFile = './logs/server.log'
+    this.logDir = './logs'
+    this.logFile = path.join(this.logDir, 'server.log')
 
-    if (!fs.existsSync('./logs')) {
-      fs.mkdirSync('./logs')
+    if (!fs.existsSync(this.logDir)) {
+      fs.mkdirSync(this.logDir)
     }
   }
 
