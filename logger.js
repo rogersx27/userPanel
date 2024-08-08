@@ -20,7 +20,6 @@ const getLogData = (type, info) => {
 const appendFile = (file, data) => {
   fs.appendFile(file, data, err => {
     if (err) {
-      console.error(`Error writing to log file: ${err.message}`)
       return { error: 'Error writing to log file', message: err.message }
     }
     console.log(`Data written to ${file}`)
