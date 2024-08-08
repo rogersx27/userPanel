@@ -1,2 +1,5 @@
 # We ignore somethin here
 
+./logs
+./logs/*
+./node_modules
