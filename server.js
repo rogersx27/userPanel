@@ -14,10 +14,8 @@ const server = createServer((req, res) => {
   if (routes[`/${pathName}`]) {
     routes[`/${pathName}`](req, res)
   } else {
-    res.writeHead(404)
-    const response = { error: 'Not found' }
-    res.end(JSON.stringify(response, null, 2))
-    logger.logRequest(req, res)
+    routes['/notFound'](req, res)
+    logger.warn({ message: 'Route not found', pathName })
   }
 })
 
