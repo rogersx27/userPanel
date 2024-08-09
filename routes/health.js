@@ -1,6 +1,7 @@
 const url = require('url')
 const { stringify, parse } = require('../utils/helpers')
 const Logger = require('../utils/logger')
+const { notFoundRoute } = require('./notFound')
 const logger = new Logger()
 
 const handleHealthRoute = (req, res) => {
@@ -33,11 +34,6 @@ const handleHealthRoute = (req, res) => {
     })
 
     logger.info({ method, pathName })
-  } else {
-    res.writeHead(404)
-    const response = { error: 'Not found' }
-    res.end(stringify(response))
-    logger.logRequest(req, res)
   }
 }
 
