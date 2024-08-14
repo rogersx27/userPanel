@@ -1,8 +1,6 @@
 const path = require('path')
 const Logger = require('../utils/logger')
-
-const { getParseRequestInfo } = require('../utils/helpers')
-const { serveFile } = require('../utils/helpers')
+const { serveFile, getParseRequestInfo } = require('../utils/helpers')
 
 const loginRoute = (req, res) => {
   const logger = new Logger()

@@ -1,7 +1,7 @@
 const url = require('url')
 const path = require('path')
 const Logger = require('../utils/logger')
-const { serveFile } = require('../utils/helpers')
+const { serveFile, getParseRequestInfo } = require('../utils/helpers')
 
 const registerRoute = (req, res) => {
   const logger = new Logger()
