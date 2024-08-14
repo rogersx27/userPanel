@@ -81,10 +81,11 @@
         button.addEventListener('click', () => {
             const inputs = document.querySelectorAll('input');
             const values = Array.from(inputs).map(input => input.value);
-            const [name, email, password, confirmPassword] = values;
-            if (name && email && password && confirmPassword) {
+            const [username, email, password, confirmPassword] = values;
+            console.log(values)
+            if (username && email && password && confirmPassword) {
                 if (password === confirmPassword) {
-                    alert('Cuenta creada exitosamente');
+                    createAccount(username, email, password);
                 } else {
                     alert('Las contraseñas no coinciden');
                 }
@@ -97,6 +98,29 @@
         existingAccount.addEventListener('click', () => {
             window.location.href = 'http://localhost:3005/login';
         });
+
+        const moveToLogin = () => {
+            alert('Cuenta creada exitosamente');
+            window.location.href = 'http://localhost:3005/login'
+        }
+
+        const createAccount = (username, email, password) => {
+            fetch('http://localhost:3005/signUp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    moveToLogin()
+                }
+            });
+        };
     </script>
 </body>
 </html>
