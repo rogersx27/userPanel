@@ -5,11 +5,9 @@ const { serveFile } = require('../utils/helpers')
 
 const registerRoute = (req, res) => {
   const logger = new Logger()
-  const parsedUrl = url.parse(req.url, true)
-  const pathName = parsedUrl.pathname.split('/')[1]
+  const { pathName, method } = getParseRequestInfo(req)
 
   const isRegisterRoute = pathName === 'register'
-  const method = req.method.toUpperCase()
 
   if (isRegisterRoute && method === 'GET') {
     const filePath = path.join(__dirname, '../public/pages', 'register.html')

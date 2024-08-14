@@ -1,15 +1,15 @@
-const url = require('url')
 const path = require('path')
 const Logger = require('../utils/logger')
+
+const { getParseRequestInfo } = require('../utils/helpers')
 const { serveFile } = require('../utils/helpers')
 
 const loginRoute = (req, res) => {
   const logger = new Logger()
-  const parsedUrl = url.parse(req.url, true)
-  const pathName = parsedUrl.pathname.split('/')[1]
+
+  const { pathName, method } = getParseRequestInfo(req)
 
   const isLoginRoute = pathName === 'login' || pathName === ''
-  const method = req.method.toUpperCase()
 
   if (isLoginRoute && method === 'GET') {
     const filePath = path.join(__dirname, '../public/pages', 'login.html')
