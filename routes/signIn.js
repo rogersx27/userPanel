@@ -1,11 +1,31 @@
 const Logger = require('../utils/logger')
-const { getParseRequestInfo } = require('../utils/helpers')
+const { getParseRequestInfo, getRequestBody } = require('../utils/helpers')
+const { findUserByEmail } = require('../database/databaseServices/select').default
 
-// Simulación de datos de usuario
-const users = [
-  { email: 'user@example.com', password: '1234' }
-]
+const handleSignIn = async (req, res) => {
+  try {
+    const { email, password } = await getRequestBody(req)
+    const user = await findUserByEmail(email)
 
+    if (user && password === user.password) {
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ message: 'Inicio de sesión correcto' }))
+    } else {
+      res.writeHead(401, { 'Content-Type': 'application/json' })
+      res.end(
+        JSON.stringify({ error: true, message: 'Credenciales incorrectas' }),
+      )
+    }
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' })
+    res.end(
+      JSON.stringify({ error: true, message: 'Error interno del servidor' }),
+    )
+    console.error('Error en el manejo del inicio de sesión:', error.message)
+  }
+}
+
+// Ruta de inicio de sesión
 const signInRoute = (req, res) => {
   const logger = new Logger()
   const { pathName, method } = getParseRequestInfo(req)
@@ -13,25 +33,7 @@ const signInRoute = (req, res) => {
   const isSignInRoute = pathName === 'signIn'
 
   if (isSignInRoute && method === 'POST') {
-    let body = ''
-    req.on('data', chunk => {
-      body += chunk.toString()
-    })
-
-    req.on('end', () => {
-      const { email, password } = JSON.parse(body)
-
-      // Verificamos si el usuario existe y si la contraseña es correcta
-      const user = users.find(user => user.email === email && user.password === password)
-
-      if (user) {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify({ message: 'Inicio de sesión correcto' }))
-      } else {
-        res.writeHead(401, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify({ error: true, message: 'Credenciales incorrectas' }))
-      }
-    })
+    handleSignIn(req, res)
   } else if (isSignInRoute) {
     res.writeHead(405, { 'Content-Type': 'text/html' })
     res.end('405 Method Not Allowed')
