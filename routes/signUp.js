@@ -15,6 +15,19 @@ const handleSignUp = async (req, res) => {
   try {
     const { username, email, password } = await getRequestBody(req)
 
+    if (!username || !email || !password) {
+      res.writeHead(400, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: true, message: 'Datos incompletos' }))
+      return
+    }
+
+    const emailRegex = /\S+@\S+\.\S+/
+    if (!emailRegex.test(email)) {
+      res.writeHead(400, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: true, message: 'Email inválido' }))
+      return
+    }
+
     const result = await createUser(username, email, password)
 
     if (result.success) {
@@ -22,7 +35,9 @@ const handleSignUp = async (req, res) => {
       res.end(JSON.stringify({ message: 'Usuario creado correctamente' }))
     } else {
       res.writeHead(500, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ error: true, message: 'Error al crear el usuario' }))
+      res.end(
+        JSON.stringify({ error: true, message: 'Error al crear el usuario' }),
+      )
       console.error('Error al insertar el usuario:', result.error.message)
     }
   } catch (error) {
@@ -49,4 +64,3 @@ const signUpRoute = async (req, res) => {
 }
 
 module.exports = { signUpRoute }
-
