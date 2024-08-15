@@ -17,10 +17,16 @@ document.addEventListener('DOMContentLoaded', function () {
   saveButton.addEventListener('click', handleCreateEvent)
 
   async function handleCreateEvent() {
-    const { title, date, endDate, time, location } = getValues()
+    const { title, description, startTime, endTime, location } = getValues()
 
-    if (title && date && endDate && time && location) {
-      const response = await createEvent(title, date, time, location)
+    if (title && startTime && endTime) {
+      const response = await createEvent(
+        title,
+        description,
+        startTime,
+        endTime,
+        location,
+      )
 
       if (response.success) {
         const newEvent = document.createElement('div')
@@ -30,63 +36,75 @@ document.addEventListener('DOMContentLoaded', function () {
         eventTitle.textContent = title
         newEvent.appendChild(eventTitle)
 
-        const eventDate = document.createElement('p')
-        eventDate.innerHTML = `<span>Fecha de Incio:</span> ${new Date(
-          date,
-        ).toLocaleDateString('es-ES')}`
-        newEvent.appendChild(eventDate)
+        const eventDescription = document.createElement('p')
+        eventDescription.textContent = description || 'Sin descripción'
+        newEvent.appendChild(eventDescription)
 
-        const eventEndDate = document.createElement('p')
-        eventEndDate.innerHTML = `<span>Fecha de Fin:</span> ${new Date(
-          endDate,
-        ).toLocaleDateString('es-ES')}`
+        const eventStartTime = document.createElement('p')
+        eventStartTime.innerHTML = `<span>Hora de inicio:</span> ${new Date(
+          startTime,
+        ).toLocaleString('es-ES')}`
+        newEvent.appendChild(eventStartTime)
 
-        const eventTime = document.createElement('p')
-        eventTime.innerHTML = `<span>Hora:</span> ${time}`
-        newEvent.appendChild(eventTime)
+        const eventEndTime = document.createElement('p')
+        eventEndTime.innerHTML = `<span>Hora de fin:</span> ${new Date(
+          endTime,
+        ).toLocaleString('es-ES')}`
+        newEvent.appendChild(eventEndTime)
 
         const eventLocation = document.createElement('p')
-        eventLocation.innerHTML = `<span>Ubicación:</span> ${location}`
+        eventLocation.innerHTML = `<span>Ubicación:</span> ${
+          location || 'Sin ubicación'
+        }`
         newEvent.appendChild(eventLocation)
 
         dashboardContainer.insertBefore(newEvent, addButton.parentElement)
 
         popupContainer.style.display = 'none'
         clearPopupInputs()
+        return
       } else {
         alert('Error al crear el evento')
       }
     } else {
-      alert('Por favor, completa todos los campos antes de guardar.')
+      alert(
+        'Por favor, completa todos los campos obligatorios antes de guardar.',
+      )
     }
   }
 
-  async function createEvent(title, date, endDate, time, location) {
+  async function createEvent(title, description, startTime, endTime, location) {
     const response = await fetch('http://localhost:3005/createEvent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ title, date, endDate, time, location }),
+      body: JSON.stringify({
+        title,
+        description,
+        start_time: startTime,
+        end_time: endTime,
+        location,
+      }),
     })
     return response.json()
   }
 
   function getValues() {
     const title = document.getElementById('event-title').value
-    const date = document.getElementById('event-date').value
-    const endDate = document.getElementById('event-end-date').value
-    const time = document.getElementById('event-time').value
+    const description = document.getElementById('event-description').value
+    const startTime = document.getElementById('event-start-time').value
+    const endTime = document.getElementById('event-end-time').value
     const location = document.getElementById('event-location').value
 
-    return { title, date, endDate, time, location }
+    return { title, description, startTime, endTime, location }
   }
 
   function clearPopupInputs() {
     document.getElementById('event-title').value = ''
-    document.getElementById('event-date').value = ''
-    document.getElementById('event-time').value = ''
+    document.getElementById('event-description').value = ''
+    document.getElementById('event-start-time').value = ''
+    document.getElementById('event-end-time').value = ''
     document.getElementById('event-location').value = ''
-    document.getElementById('event-end-date').value = ''
   }
 })
