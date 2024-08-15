@@ -77,50 +77,64 @@
         <a href="#">¿Ya tienes una cuenta? Inicia sesión</a>
     </div>
     <script>
-        const button = document.querySelector('button');
-        button.addEventListener('click', () => {
-            const inputs = document.querySelectorAll('input');
-            const values = Array.from(inputs).map(input => input.value);
-            const [username, email, password, confirmPassword] = values;
-            console.log(values)
-            if (username && email && password && confirmPassword) {
-                if (password === confirmPassword) {
-                    createAccount(username, email, password);
-                } else {
-                    alert('Las contraseñas no coinciden');
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button');
+            const existingAccount = document.querySelector('a');
+        
+            button.addEventListener('click', handleSignUp);
+        
+            existingAccount.addEventListener('click', () => {
+                redirectTo('http://localhost:3005/login')
+            });
+        
+            async function handleSignUp() {
+                const [username, email, password, confirmPassword] = getInputValues();
+        
+                if (!username || !email || !password || !confirmPassword) {
+                    alert('Por favor, llena todos los campos');
+                    return;
                 }
-            } else {
-                alert('Por favor, llena todos los campos');
+        
+                if (password !== confirmPassword) {
+                    alert('Las contraseñas no coinciden');
+                    return;
+                }
+        
+                try {
+                    const response = await createAccount(username, email, password);
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        alert('Cuenta creada exitosamente');
+                        redirectTo('http://localhost:3005/login');
+                    }
+                } catch (error) {
+                    console.error('Error al crear la cuenta:', error);
+                    alert('Hubo un error al intentar crear la cuenta. Por favor, inténtalo de nuevo.');
+                }
+            }
+        
+            function getInputValues() {
+                const inputs = document.querySelectorAll('input');
+                return Array.from(inputs).map(input => input.value);
+            }
+        
+            async function createAccount(username, email, password) {
+                const response = await fetch('http://localhost:3005/signUp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+                return response.json();
             }
         });
 
-        const existingAccount = document.querySelector('a');
-        existingAccount.addEventListener('click', () => {
-            window.location.href = 'http://localhost:3005/login';
-        });
-
-        const moveToLogin = () => {
-            alert('Cuenta creada exitosamente');
-            window.location.href = 'http://localhost:3005/login'
+        function redirectTo(url) {
+            window.location.href = url;
         }
-
-        const createAccount = (username, email, password) => {
-            fetch('http://localhost:3005/signUp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    moveToLogin()
-                }
-            });
-        };
+        
     </script>
 </body>
 </html>

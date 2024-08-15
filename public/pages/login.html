@@ -76,51 +76,56 @@
     </div>
 
     <script>
-        const button = document.querySelector('button');
-        button.addEventListener('click', () => {
-            const email = document.querySelector('input[type="email"]').value;
-            const password = document.querySelector('input[type="password"]').value;
-
-            console.log(email)
-            console.log(password)
-
-            fetch('http://localhost:3005/signIn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.error) {
-                    alert(data.message);
-                } else {
-                    moveToDashboard();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button');
+            const forgotPasswordLink = document.querySelectorAll('a')[0];
+            const createAccountLink = document.querySelectorAll('a')[1];
+        
+            button.addEventListener('click', handleSignIn);
+        
+            forgotPasswordLink.addEventListener('click', () => {
+                redirectTo('http://localhost:3005/forgotPassword');
             });
+        
+            createAccountLink.addEventListener('click', () => {
+                redirectTo('http://localhost:3005/register');
+            });
+        
+            async function handleSignIn() {
+                const email = document.querySelector('input[type="email"]').value;
+                const password = document.querySelector('input[type="password"]').value;
+        
+                if (!email || !password) {
+                    alert('Por favor, ingresa tu correo y contraseña');
+                    return;
+                }
+        
+                try {
+                    const response = await fetch('http://localhost:3005/signIn', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await response.json();
+        
+                    if (data.error) {
+                        alert(data.message);
+                    } else {
+                        redirectTo('http://localhost:3005/dashboard');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un problema al intentar iniciar sesión. Por favor, inténtalo de nuevo.');
+                }
+            }
+        
+            function redirectTo(url) {
+                window.location.href = url;
+            }
         });
-
-        const forgotPassword = document.querySelectorAll('a')[0];
-        forgotPassword.addEventListener('click', () => {
-            window.location.href = 'http://localhost:3005/forgotPassword';
-        });
-
-        const createAccount = document.querySelectorAll('a')[1];
-        createAccount.addEventListener('click', () => {
-            window.location.href = 'http://localhost:3005/register';
-        });
-
-        const moveToDashboard = () => {
-            window.location.href = 'http://localhost:3005/dashboard';
-        }
+        
     </script>
 </body>
 </html>
