@@ -74,5 +74,58 @@
         <a href="#">¿Olvidaste tu contraseña?</a>
         <a href="#">Crear una cuenta</a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button');
+            const forgotPasswordLink = document.querySelectorAll('a')[0];
+            const createAccountLink = document.querySelectorAll('a')[1];
+        
+            button.addEventListener('click', handleSignIn);
+        
+            forgotPasswordLink.addEventListener('click', () => {
+                redirectTo('http://localhost:3005/forgotPassword');
+            });
+        
+            createAccountLink.addEventListener('click', () => {
+                redirectTo('http://localhost:3005/register');
+            });
+        
+            async function handleSignIn() {
+                const email = document.querySelector('input[type="email"]').value;
+                const password = document.querySelector('input[type="password"]').value;
+        
+                if (!email || !password) {
+                    alert('Por favor, ingresa tu correo y contraseña');
+                    return;
+                }
+        
+                try {
+                    const response = await fetch('http://localhost:3005/signIn', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await response.json();
+        
+                    if (data.error) {
+                        alert(data.message);
+                    } else {
+                        redirectTo('http://localhost:3005/dashboard');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un problema al intentar iniciar sesión. Por favor, inténtalo de nuevo.');
+                }
+            }
+        
+            function redirectTo(url) {
+                window.location.href = url;
+            }
+        });
+        
+    </script>
 </body>
 </html>

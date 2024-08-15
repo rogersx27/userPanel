@@ -1,22 +1,22 @@
+const url = require('url')
 const path = require('path')
 const Logger = require('../utils/logger')
 const { serveFile, getParseRequestInfo } = require('../utils/helpers')
 
-const loginRoute = (req, res) => {
+const registerRoute = (req, res) => {
   const logger = new Logger()
-
   const { pathName, method } = getParseRequestInfo(req)
 
-  const isLoginRoute = pathName === 'login' || pathName === ''
+  const isRegisterRoute = pathName === 'register'
 
-  if (isLoginRoute && method === 'GET') {
-    const filePath = path.join(__dirname, '../public/pages', 'login.html')
+  if (isRegisterRoute && method === 'GET') {
+    const filePath = path.join(__dirname, '../public/pages', 'register.html')
     serveFile(res, filePath, logger, pathName)
-  } else if (isLoginRoute) {
+  } else if (isRegisterRoute) {
     res.writeHead(405, { 'Content-Type': 'text/html' })
     res.end('405 Method Not Allowed')
     logger.warn({ message: 'Method Not Allowed', method: req.method })
   }
 }
 
-module.exports = { loginRoute }
+module.exports = { registerRoute }

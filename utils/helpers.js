@@ -1,4 +1,5 @@
 const fs = require('fs')
+const url = require('url')
 
 const parse = body => {
   try {
@@ -76,6 +77,31 @@ async function serveFile(res, filePath, logger, pathName) {
   }
 }
 
+const getParseRequestInfo = req => {
+  const parsedUrl = url.parse(req.url, true)
+  const pathName = parsedUrl.pathname.split('/')[1]
+  const method = req.method.toUpperCase()
+
+  return { pathName, method }
+}
+
+const getRequestBody = req => {
+  return new Promise((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => {
+      body += chunk.toString()
+    })
+    req.on('end', () => {
+      try {
+        const parsedBody = JSON.parse(body)
+        resolve(parsedBody)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  })
+}
+
 module.exports = {
   stringify,
   parse,
@@ -83,4 +109,6 @@ module.exports = {
   appendFile,
   readFile,
   serveFile,
+  getParseRequestInfo,
+  getRequestBody
 }
