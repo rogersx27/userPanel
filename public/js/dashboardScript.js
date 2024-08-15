@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
   saveButton.addEventListener('click', handleCreateEvent)
 
   async function handleCreateEvent() {
-    const { title, date, time, location } = getValues()
+    const { title, date, endDate, time, location } = getValues()
 
-    if (title && date && time && location) {
+    if (title && date && endDate && time && location) {
       const response = await createEvent(title, date, time, location)
 
       if (response.success) {
@@ -31,10 +31,15 @@ document.addEventListener('DOMContentLoaded', function () {
         newEvent.appendChild(eventTitle)
 
         const eventDate = document.createElement('p')
-        eventDate.innerHTML = `<span>Fecha:</span> ${new Date(
+        eventDate.innerHTML = `<span>Fecha de Incio:</span> ${new Date(
           date,
         ).toLocaleDateString('es-ES')}`
         newEvent.appendChild(eventDate)
+
+        const eventEndDate = document.createElement('p')
+        eventEndDate.innerHTML = `<span>Fecha de Fin:</span> ${new Date(
+          endDate,
+        ).toLocaleDateString('es-ES')}`
 
         const eventTime = document.createElement('p')
         eventTime.innerHTML = `<span>Hora:</span> ${time}`
@@ -56,13 +61,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  async function createEvent(title, date, time, location) {
+  async function createEvent(title, date, endDate, time, location) {
     const response = await fetch('http://localhost:3005/createEvent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ title, date, time, location }),
+      body: JSON.stringify({ title, date, endDate, time, location }),
     })
     return response.json()
   }
@@ -70,10 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function getValues() {
     const title = document.getElementById('event-title').value
     const date = document.getElementById('event-date').value
+    const endDate = document.getElementById('event-end-date').value
     const time = document.getElementById('event-time').value
     const location = document.getElementById('event-location').value
 
-    return { title, date, time, location }
+    return { title, date, endDate, time, location }
   }
 
   function clearPopupInputs() {
@@ -81,5 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('event-date').value = ''
     document.getElementById('event-time').value = ''
     document.getElementById('event-location').value = ''
+    document.getElementById('event-end-date').value = ''
   }
 })
