@@ -6,6 +6,7 @@ const { signInRoute } = require('./signIn')
 const { forgotPasswordRoute } = require('./forgotPassword')
 const { dashboardRoute } = require('./dashboard')
 const { signUpRoute } = require('./signUp')
+const { createEventRoute } = require('./createEvent')
 
 const routes = {
   '/health': handleHealthRoute,
@@ -18,6 +19,7 @@ const routes = {
   '/forgotPassword': forgotPasswordRoute,
   '/dashboard': dashboardRoute,
   '/signUp': signUpRoute,
+  '/createEvent': createEventRoute,
 }
 
 module.exports = routes
