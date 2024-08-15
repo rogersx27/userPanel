@@ -75,6 +75,77 @@
         .add-event button:hover {
             background-color: #17a347;
         }
+
+        /* Estilos del pop-up */
+        .popup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            color: #FFFFFF;
+        }
+
+        .popup h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .popup label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .popup input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #333333;
+            border: 1px solid #555555;
+            border-radius: 5px;
+            color: #FFFFFF;
+        }
+
+        .popup .buttons {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .popup button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .popup .save-button {
+            background-color: #1DB954;
+            color: #FFFFFF;
+        }
+
+        .popup .cancel-button {
+            background-color: #555555;
+            color: #FFFFFF;
+            margin-right: 10px;
+        }
+
+        .popup button:hover {
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -106,5 +177,35 @@
             <button>Añadir nuevo evento</button>
         </div>
     </div>
+
+    <!-- Pop-up para añadir nuevo evento -->
+    <div class="popup-container">
+        <div class="popup">
+            <h2>Añadir nuevo evento</h2>
+            
+            <label for="event-title">Título:</label>
+            <input type="text" id="event-title" placeholder="Título del evento">
+    
+            <label for="event-description">Descripción:</label>
+            <textarea id="event-description" placeholder="Descripción del evento"></textarea>
+    
+            <label for="event-start-time">Hora de inicio:</label>
+            <input type="datetime-local" id="event-start-time">
+    
+            <label for="event-end-time">Hora de fin:</label>
+            <input type="datetime-local" id="event-end-time">
+    
+            <label for="event-location">Ubicación:</label>
+            <input type="text" id="event-location" placeholder="Ubicación del evento">
+    
+            <div class="buttons">
+                <button class="cancel-button">Cancelar</button>
+                <button class="save-button">Guardar</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="/js/dashboardScript.js"></script>
 </body>
 </html>
