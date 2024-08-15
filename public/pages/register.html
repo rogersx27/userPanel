@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            width: 300px;
+        }
+
+        .signup-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .signup-container input[type="text"],
+        .signup-container input[type="email"],
+        .signup-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #333333;
+            border: 1px solid #444444;
+            border-radius: 5px;
+            color: #FFFFFF;
+        }
+
+        .signup-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1DB954;
+            border: none;
+            border-radius: 5px;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .signup-container a {
+            color: #B3B3B3;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        .signup-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Crear Cuenta</h1>
+        <input type="text" placeholder="Nombre Completo">
+        <input type="email" placeholder="Correo Electrónico">
+        <input type="password" placeholder="Contraseña">
+        <input type="password" placeholder="Confirmar Contraseña">
+        <button>Crear Cuenta</button>
+        <a href="#">¿Ya tienes una cuenta? Inicia sesión</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button');
+            const existingAccount = document.querySelector('a');
+        
+            button.addEventListener('click', handleSignUp);
+        
+            existingAccount.addEventListener('click', () => {
+                redirectTo('http://localhost:3005/login')
+            });
+        
+            async function handleSignUp() {
+                const [username, email, password, confirmPassword] = getInputValues();
+        
+                if (!username || !email || !password || !confirmPassword) {
+                    alert('Por favor, llena todos los campos');
+                    return;
+                }
+        
+                if (password !== confirmPassword) {
+                    alert('Las contraseñas no coinciden');
+                    return;
+                }
+        
+                try {
+                    const response = await createAccount(username, email, password);
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        alert('Cuenta creada exitosamente');
+                        redirectTo('http://localhost:3005/login');
+                    }
+                } catch (error) {
+                    console.error('Error al crear la cuenta:', error);
+                    alert('Hubo un error al intentar crear la cuenta. Por favor, inténtalo de nuevo.');
+                }
+            }
+        
+            function getInputValues() {
+                const inputs = document.querySelectorAll('input');
+                return Array.from(inputs).map(input => input.value);
+            }
+        
+            async function createAccount(username, email, password) {
+                const response = await fetch('http://localhost:3005/signUp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+                return response.json();
+            }
+        });
+
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+        
+    </script>
+</body>
+</html>
