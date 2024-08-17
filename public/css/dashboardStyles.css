@@ -11,7 +11,32 @@ body {
 
 .container {
   display: flex;
-  gap: 40px;
+  flex-direction: row-reverse;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logout-btn {
+  background-color: #ff5252;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff1744;
 }
 
 .agenda,
@@ -20,14 +45,8 @@ body {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.agenda {
-  width: 350px;
-}
-
-.formulario {
-  width: 350px;
+  flex: 1;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -112,42 +131,6 @@ textarea {
   border-radius: 5px;
   font-family: inherit;
   box-sizing: border-box;
-}
-
-input[type='datetime-local'] {
-  width: 100%;
-  padding: 10px;
-  background-color: #2e2e2e;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: 16px;
-  box-sizing: border-box;
-  appearance: none; /* Ocultar el estilo por defecto de los navegadores */
-  position: relative;
-}
-
-input[type='datetime-local']::-webkit-calendar-picker-indicator {
-  background-color: transparent;
-  color: #00c853;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-input[type='datetime-local']::-webkit-calendar-picker-indicator:hover {
-  color: #009624;
-}
-
-input[type='datetime-local']::placeholder {
-  color: #aaa;
-  opacity: 1; /* Mostrar el color del placeholder */
-}
-
-input[type='datetime-local']:focus {
-  outline: none;
-  border-color: #00c853;
-  box-shadow: 0 0 5px rgba(0, 200, 83, 0.5);
 }
 
 textarea {
