@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const addButton = document.querySelector('.add-event-btn')
   const saveButton = document.querySelector('.save-btn')
   const cancelButton = document.querySelector('.cancel-btn')
-  const dashboardContainer = document.querySelector('.dashboard-container')
-  const eventsContainer = document.querySelector('.events-container') // Contenedor para los eventos
+  const logoutButton = document.querySelector('.logout-btn')
+  const eventsContainer = document.querySelector('.events-container')
   const eventTitle = document.getElementById('event-title')
 
   const focusOnTitle = () => {
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
   addButton.addEventListener('click', focusOnTitle)
   saveButton.addEventListener('click', handleCreateEvent)
   cancelButton.addEventListener('click', clearPopupInputs)
+  logoutButton.addEventListener('click', handleLogout)
 
   async function handleCreateEvent() {
     const { title, description, startTime, endTime, location } = getValues()
@@ -106,5 +107,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('event-start-time').value = ''
     document.getElementById('event-end-time').value = ''
     document.getElementById('event-location').value = ''
+  }
+
+  function handleLogout() {
+    window.location.href = 'http://localhost:3005/login'
   }
 })
