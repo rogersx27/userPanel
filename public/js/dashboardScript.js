@@ -1,20 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const addButton = document.querySelector('.add-event button')
-  const popupContainer = document.querySelector('.popup-container')
-  const saveButton = document.querySelector('.save-button')
-  const cancelButton = document.querySelector('.cancel-button')
+  const addButton = document.querySelector('.add-event-btn')
+  const saveButton = document.querySelector('.save-btn')
+  const cancelButton = document.querySelector('.cancel-btn')
   const dashboardContainer = document.querySelector('.dashboard-container')
+  const eventsContainer = document.querySelector('.events-container') // Contenedor para los eventos
+  const eventTitle = document.getElementById('event-title')
 
-  addButton.addEventListener('click', function () {
-    popupContainer.style.display = 'flex'
-  })
+  const focusOnTitle = () => {
+    eventTitle.focus()
+    eventTitle.classList.add('shake')
 
-  cancelButton.addEventListener('click', function () {
-    popupContainer.style.display = 'none'
-    clearPopupInputs()
-  })
+    setTimeout(() => {
+      eventTitle.classList.remove('shake')
+    }, 500)
+  }
 
+  addButton.addEventListener('click', focusOnTitle)
   saveButton.addEventListener('click', handleCreateEvent)
+  cancelButton.addEventListener('click', clearPopupInputs)
 
   async function handleCreateEvent() {
     const { title, description, startTime, endTime, location } = getValues()
@@ -58,18 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }`
         newEvent.appendChild(eventLocation)
 
-        dashboardContainer.insertBefore(newEvent, addButton.parentElement)
+        eventsContainer.appendChild(newEvent)
 
-        popupContainer.style.display = 'none'
         clearPopupInputs()
         return
       } else {
         alert('Error al crear el evento')
       }
     } else {
-      alert(
-        'Por favor, completa todos los campos obligatorios antes de guardar.',
-      )
+      focusOnTitle()
     }
   }
 
