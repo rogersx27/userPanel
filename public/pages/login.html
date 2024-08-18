@@ -4,65 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #121212;
             color: #FFFFFF;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
-
+        
         .login-container {
             background-color: #1E1E1E;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            width: 300px;
-        }
-
-        .login-container h1 {
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+            width: 350px;
             text-align: center;
-            margin-bottom: 20px;
+            box-sizing: border-box;
+            animation: pulse 3s infinite ease-in-out;
         }
-
+        
+        .login-container h1 {
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
         .login-container input[type="email"],
         .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            width: calc(100% - 24px); /* Ajusta el ancho para compensar padding y border */
+            padding: 12px;
+            margin: 12px auto; /* Asegura que el margen se aplique de forma uniforme */
             background-color: #333333;
             border: 1px solid #444444;
-            border-radius: 5px;
+            border-radius: 8px;
             color: #FFFFFF;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            display: block;
         }
-
+        
+        .login-container input[type="email"]:focus,
+        .login-container input[type="password"]:focus {
+            border-color: #1DB954;
+            outline: none;
+        }
+        
         .login-container button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #1DB954;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             color: #FFFFFF;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+            display: block;
+            box-sizing: border-box;
         }
-
+        
+        .login-container button:hover {
+            background-color: #1AA34A;
+        }
+        
         .login-container a {
             color: #B3B3B3;
             display: block;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
         }
-
+        
         .login-container a:hover {
+            color: #FFFFFF;
             text-decoration: underline;
         }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(10vw);
+                opacity: 0;
+            }
+        }
+        
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in;
+        }
+        
+        .bubble:nth-child(2) {
+            width: 30px;
+            height: 30px;
+            left: 25%;
+            animation-duration: 12s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            left: 50%;
+            animation-duration: 15s;
+            animation-delay: 4s;
+        }
+        
+        .bubble:nth-child(4) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 10s;
+            animation-delay: 6s;
+        }
+        
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 90%;
+            animation-duration: 14s;
+            animation-delay: 8s;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0px 0px 20px rgba(29, 185, 84, 0.5);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0px 0px 30px rgba(29, 185, 84, 0.8);
+                transform: scale(1.02);
+            }
+            100% {
+                box-shadow: 0px 0px 20px rgba(29, 185, 84, 0.5);
+                transform: scale(1);
+            }
+        }
+        
+        
+        
     </style>
 </head>
 <body>
@@ -74,6 +175,13 @@
         <a href="#">¿Olvidaste tu contraseña?</a>
         <a href="#">Crear una cuenta</a>
     </div>
+
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

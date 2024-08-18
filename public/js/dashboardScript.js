@@ -1,20 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const addButton = document.querySelector('.add-event button')
-  const popupContainer = document.querySelector('.popup-container')
-  const saveButton = document.querySelector('.save-button')
-  const cancelButton = document.querySelector('.cancel-button')
-  const dashboardContainer = document.querySelector('.dashboard-container')
+  const addButton = document.querySelector('.add-event-btn')
+  const saveButton = document.querySelector('.save-btn')
+  const cancelButton = document.querySelector('.cancel-btn')
+  const logoutButton = document.querySelector('.logout-btn')
+  const eventsContainer = document.querySelector('.events-container')
+  const eventTitle = document.getElementById('event-title')
 
-  addButton.addEventListener('click', function () {
-    popupContainer.style.display = 'flex'
-  })
+  const focusOnTitle = () => {
+    eventTitle.focus()
+    eventTitle.classList.add('shake')
 
-  cancelButton.addEventListener('click', function () {
-    popupContainer.style.display = 'none'
-    clearPopupInputs()
-  })
+    setTimeout(() => {
+      eventTitle.classList.remove('shake')
+    }, 500)
+  }
 
+  addButton.addEventListener('click', focusOnTitle)
   saveButton.addEventListener('click', handleCreateEvent)
+  cancelButton.addEventListener('click', clearPopupInputs)
+  logoutButton.addEventListener('click', handleLogout)
 
   async function handleCreateEvent() {
     const { title, description, startTime, endTime, location } = getValues()
@@ -58,18 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }`
         newEvent.appendChild(eventLocation)
 
-        dashboardContainer.insertBefore(newEvent, addButton.parentElement)
+        eventsContainer.appendChild(newEvent)
 
-        popupContainer.style.display = 'none'
         clearPopupInputs()
         return
       } else {
         alert('Error al crear el evento')
       }
     } else {
-      alert(
-        'Por favor, completa todos los campos obligatorios antes de guardar.',
-      )
+      focusOnTitle()
     }
   }
 
@@ -106,5 +107,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('event-start-time').value = ''
     document.getElementById('event-end-time').value = ''
     document.getElementById('event-location').value = ''
+  }
+
+  function handleLogout() {
+    window.location.href = 'http://localhost:3005/login'
   }
 })
