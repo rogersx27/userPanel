@@ -1,26 +1,21 @@
 const path = require('path')
 const Logger = require('../utils/logger')
-const { getParseRequestInfo } = require('../utils/helpers')
+const { getParseRequestInfo, getRequestBody } = require('../utils/helpers')
 const { serveFile } = require('../utils/helpers')
 
 const users = [{ email: 'user@example.com', password: '1234' }]
 
-const forgotPasswordRoute = (req, res) => {
+const forgotPasswordRoute = async (req, res) => {
   const logger = new Logger()
   const { pathName, method } = getParseRequestInfo(req)
 
   const isForgotPasswordRoute = pathName === 'forgotPassword'
 
   if (isForgotPasswordRoute && method === 'POST') {
-    let body = ''
-    req.on('data', chunk => {
-      body += chunk.toString()
-    })
+    const { email } = await getRequestBody(req)
 
     req.on('end', () => {
       try {
-        const { email } = JSON.parse(body)
-
         const user = users.find(user => user.email === email)
 
         if (user) {

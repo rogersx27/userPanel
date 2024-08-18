@@ -3,108 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Agenda de Eventos</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #FFFFFF;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .dashboard-container {
-            background-color: #1E1E1E;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .dashboard-container h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .event {
-            background-color: #333333;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .event h2 {
-            margin: 0 0 10px 0;
-            font-size: 18px;
-            color: #1DB954;
-        }
-
-        .event p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #B3B3B3;
-        }
-
-        .event p span {
-            font-weight: bold;
-            color: #FFFFFF;
-        }
-
-        .add-event {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .add-event button {
-            padding: 10px 20px;
-            background-color: #1DB954;
-            border: none;
-            border-radius: 5px;
-            color: #FFFFFF;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .add-event button:hover {
-            background-color: #17a347;
-        }
-    </style>
+    <title>Agenda de Eventos</title>
+    <link rel="stylesheet" href="css/dashboardStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="dashboard-container">
-        <h1>Agenda de Eventos</h1>
-
-        <div class="event">
-            <h2>Reunión con el equipo de desarrollo</h2>
-            <p><span>Fecha:</span> 20 de agosto, 2024</p>
-            <p><span>Hora:</span> 10:00 AM</p>
-            <p><span>Ubicación:</span> Sala de conferencias 1</p>
+    <div class="container">
+        <div class="side-bar">
+            <button class="btn logout-btn">Salir</button>
+        </div>
+        <div class="agenda">
+            <h1>Agenda de Eventos</h1>
+            <div class="events-container">
+                <!-- Los eventos se añadirán aquí dinámicamente -->
+            </div>
+            <button class="btn add-event-btn">Añadir nuevo evento</button>
         </div>
 
-        <div class="event">
-            <h2>Presentación del proyecto a clientes</h2>
-            <p><span>Fecha:</span> 22 de agosto, 2024</p>
-            <p><span>Hora:</span> 02:00 PM</p>
-            <p><span>Ubicación:</span> Oficina principal</p>
-        </div>
+        <div class="formulario">
+            <h1>Añadir nuevo evento</h1>
+            <form id="event-form">
+                <label for="event-title">Título:</label>
+                <input type="text" id="event-title" placeholder="Título del evento">
 
-        <div class="event">
-            <h2>Sesión de brainstorming</h2>
-            <p><span>Fecha:</span> 25 de agosto, 2024</p>
-            <p><span>Hora:</span> 04:00 PM</p>
-            <p><span>Ubicación:</span> Sala de juntas</p>
-        </div>
+                <label for="event-description">Descripción:</label>
+                <textarea id="event-description" placeholder="Descripción del evento"></textarea>
 
-        <div class="add-event">
-            <button>Añadir nuevo evento</button>
+                <label for="event-start-time">Hora de inicio:</label>
+                <input type="datetime-local" id="event-start-time">
+
+                <label for="event-end-time">Hora de fin:</label>
+                <input type="datetime-local" id="event-end-time">
+
+                <label for="event-location">Ubicación:</label>
+                <input type="text" id="event-location" placeholder="Ubicación del evento">
+
+                <div class="form-buttons">
+                    <button type="button" class="btn cancel-btn">Cancelar</button>
+                    <button type="button" class="btn save-btn">Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
+    <script src="js/dashboardScript.js"></script>
 </body>
 </html>

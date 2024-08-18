@@ -1,5 +1,6 @@
 const fs = require('fs')
 const url = require('url')
+const path = require('path')
 
 const parse = body => {
   try {
@@ -82,7 +83,7 @@ const getParseRequestInfo = req => {
   const pathName = parsedUrl.pathname.split('/')[1]
   const method = req.method.toUpperCase()
 
-  return { pathName, method }
+  return { pathName, method, parsedUrl }
 }
 
 const getRequestBody = req => {
@@ -102,6 +103,55 @@ const getRequestBody = req => {
   })
 }
 
+async function serveStaticFile(res, filePath, logger) {
+  try {
+    const result = await readFile(filePath)
+
+    if (result.error) { 
+      res.writeHead(404, { 'Content-Type': 'text/html' })
+      res.end(result.error)
+      logger.error({ message: 'File not found', filePath, error: result.error })
+      return
+    }
+
+    // Determinar el tipo de contenido basado en la extensión del archivo
+    const ext = path.extname(filePath).toLowerCase()
+    let contentType = 'text/html'
+
+    switch (ext) {
+      case '.js':
+        contentType = 'application/javascript'
+        break
+      case '.css':
+        contentType = 'text/css'
+        break
+      case '.png':
+        contentType = 'image/png'
+        break
+      case '.jpg':
+      case '.jpeg':
+        contentType = 'image/jpeg'
+        break
+      case '.gif':
+        contentType = 'image/gif'
+        break
+      case '.svg':
+        contentType = 'image/svg+xml'
+        break
+      default:
+        contentType = 'application/octet-stream'
+    }
+
+    res.writeHead(200, { 'Content-Type': contentType })
+    res.end(result.data)
+    logger.info({ message: 'File served', filePath })
+  } catch (err) {
+    res.writeHead(500, { 'Content-Type': 'text/html' })
+    res.end('500 Internal Server Error')
+    logger.error({ message: 'Internal Server Error', error: err.message })
+  }
+}
+
 module.exports = {
   stringify,
   parse,
@@ -110,5 +160,6 @@ module.exports = {
   readFile,
   serveFile,
   getParseRequestInfo,
-  getRequestBody
+  getRequestBody,
+  serveStaticFile,
 }
